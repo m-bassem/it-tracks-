@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>IT Tracks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+         :root {
+            --bg: #eef1fb;
+            --ink: #14172b;
+            --mute: #4d5273;
+            --glass: rgba(255, 255, 255, .55);
+            --edge: rgba(255, 255, 255, .85);
+            --chip: rgba(255, 255, 255, .6);
+            --track: rgba(20, 23, 43, .1);
+            --shadow: 0 20px 50px rgba(60, 70, 140, .16);
+            --orb: .55;
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px)
+        }
+        
+        @media(prefers-color-scheme:dark) {
+             :root:not([data-theme="light"]) {
+                --bg: #0b0d1c;
+                --ink: #f0f2ff;
+                --mute: #a9aed0;
+                --glass: rgba(255, 255, 255, .07);
+                --edge: rgba(255, 255, 255, .16);
+                --chip: rgba(255, 255, 255, .08);
+                --track: rgba(255, 255, 255, .12);
+                --shadow: 0 20px 50px rgba(0, 0, 0, .45);
+                --orb: .7
+            }
+        }
+        
+         :root[data-theme="dark"] {
+            --bg: #0b0d1c;
+            --ink: #f0f2ff;
+            --mute: #a9aed0;
+            --glass: rgba(255, 255, 255, .07);
+            --edge: rgba(255, 255, 255, .16);
+            --chip: rgba(255, 255, 255, .08);
+            --track: rgba(255, 255, 255, .12);
+            --shadow: 0 20px 50px rgba(0, 0, 0, .45);
+            --orb: .7
+        }
+        
+        html {
+            scroll-padding-top: env(safe-area-inset-top, 0px)
+        }
+        
+        * {
+            box-sizing: border-box
+        }
+        
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: 'Sora', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden
+        }
+        
+        .orbs {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none
+        }
+        
+        .orbs i {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: var(--orb)
+        }
+        
+        .orbs i:nth-child(1) {
+            width: 46vmax;
+            height: 46vmax;
+            background: #6d5efc;
+            top: -12%;
+            left: -10%
+        }
+        
+        .orbs i:nth-child(2) {
+            width: 38vmax;
+            height: 38vmax;
+            background: #807d7de7;
+            top: 35%;
+            right: -14%
+        }
+        
+        .orbs i:nth-child(3) {
+            width: 40vmax;
+            height: 40vmax;
+            background: #260245;
+            bottom: -14%;
+            left: 12%
+        }
+        
+        main {
+            position: relative;
+            z-index: 1;
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 60px 18px 80px
+        }
+        
+        h1 {
+            font-size: clamp(2.1rem, 6vw, 3.3rem);
+            font-weight: 700;
+            letter-spacing: -.03em;
+            margin: 0 0 8px
+        }
+        
+        .total {
+            color: var(--mute);
+            font-weight: 300;
+            margin: 0 0 30px
+        }
+        
+        .glass {
+            background: var(--glass);
+            border: 1px solid var(--edge);
+            backdrop-filter: blur(26px) saturate(170%);
+            -webkit-backdrop-filter: blur(26px) saturate(170%);
+            box-shadow: var(--shadow), inset 0 1px 0 var(--edge)
+        }
+        
+        details.t {
+            --c: #6d5efc;
+            margin-bottom: 16px;
+            border-radius: 26px;
+            overflow: hidden
+        }
+        
+        summary {
+            list-style: none;
+            cursor: pointer;
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+            padding: 24px 26px
+        }
+        
+        summary::-webkit-details-marker {
+            display: none
+        }
+        
+        summary:focus-visible {
+            outline: 3px solid var(--c);
+            outline-offset: -3px;
+            border-radius: 26px
+        }
+        
+        .dot {
+            flex: none;
+            width: 14px;
+            height: 14px;
+            margin-top: 9px;
+            border-radius: 50%;
+            background: var(--c);
+            box-shadow: 0 0 0 6px color-mix(in srgb, var(--c) 22%, transparent)
+        }
+        
+        .hd {
+            flex: 1;
+            min-width: 0
+        }
+        
+        h2 {
+            margin: 0 0 4px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: -.01em
+        }
+        
+        .hd p {
+            margin: 0 0 12px;
+            color: var(--mute);
+            font-weight: 300;
+            line-height: 1.55;
+            max-width: 58ch
+        }
+        
+        .bar {
+            height: 6px;
+            border-radius: 9px;
+            background: var(--track);
+            overflow: hidden
+        }
+        
+        .bar b {
+            display: block;
+            height: 100%;
+            width: 0;
+            background: var(--c);
+            border-radius: 9px;
+            transition: width .35s
+        }
+        
+        .cnt {
+            flex: none;
+            font-size: .85rem;
+            color: var(--mute);
+            margin-top: 6px;
+            white-space: nowrap
+        }
+        
+        .cnt:after {
+            content: "+";
+            display: inline-block;
+            margin-left: 10px;
+            font-size: 1.2rem;
+            transition: transform .25s
+        }
+        
+        details[open] .cnt:after {
+            transform: rotate(45deg)
+        }
+        
+        .body {
+            padding: 0 26px 24px 58px
+        }
+        
+        h3 {
+            margin: 18px 0 8px;
+            font-size: .95rem;
+            font-weight: 600;
+            color: var(--c)
+        }
+        
+        label {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 9px 12px;
+            margin-bottom: 6px;
+            border-radius: 14px;
+            background: var(--chip);
+            border: 1px solid var(--edge);
+            font-size: .92rem;
+            font-weight: 300;
+            cursor: pointer
+        }
+        
+        label.done span {
+            opacity: .55;
+            text-decoration: line-through
+        }
+        
+        input {
+            appearance: none;
+            -webkit-appearance: none;
+            flex: none;
+            width: 20px;
+            height: 20px;
+            margin: 0;
+            border-radius: 7px;
+            border: 2px solid var(--c);
+            background: transparent;
+            cursor: pointer;
+            display: grid;
+            place-content: center
+        }
+        
+        input:checked {
+            background: var(--c)
+        }
+        
+        input:checked:after {
+            content: "";
+            width: 5px;
+            height: 10px;
+            border: solid #fff;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg) translate(-1px, -1px)
+        }
+        
+        input:focus-visible {
+            outline: 3px solid var(--c);
+            outline-offset: 2px
+        }
+        
+        @media(max-width:560px) {
+            summary {
+                padding: 20px 18px;
+                gap: 12px
+            }
+            .body {
+                padding: 0 16px 20px
+            }
+            .cnt:after {
+                display: none
+            }
+        }
+        
+        @media(prefers-reduced-motion:reduce) {
+            * {
+                transition: none !important
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="orbs"><i></i><i></i><i></i></div>
+    <main>
+        <h1>IT Tracks</h1>
+        <p class="total"><span id="total"></span><span id="st"></span></p>
+        <div id="list"></div>
+    </main>
+    <footer style="text-align:center; font-size:.85rem; color:var(--mute); padding:0 18px 40px">
+        <p>
+            Mohamed Bassem - 2026
+        </p>
+    </footer>
+    <script>
+        const S = ["Zero: start here", "Basics", "Intermediate", "Hero"];
+        const T = [
+            ["Data Science & AI", "#8b5cf6", "Build models that predict, classify and generate, from classic ML to LLMs.", [
+                ["Python basics", "Math: algebra & probability", "NumPy & pandas", "Jupyter notebooks"],
+                ["Statistics & EDA", "Scikit-learn models", "Model evaluation", "Feature engineering"],
+                ["Deep learning (PyTorch)", "NLP & computer vision", "Time series", "Experiment tracking"],
+                ["LLMs, RAG & fine-tuning", "MLOps & deployment", "Kaggle competitions", "End-to-end AI project"]
+            ]],
+            ["Data Engineering", "#0ea5e9", "Design the pipelines and warehouses that move and store data reliably at scale.", [
+                ["Python & SQL", "Linux & Git", "Database basics", "Formats: CSV, JSON, Parquet"],
+                ["ETL / ELT pipelines", "Data warehousing & modeling", "Airflow", "Docker"],
+                ["Apache Spark", "Kafka streaming", "Cloud data services", "dbt"],
+                ["Data quality & monitoring", "Lakehouse architecture", "Cost optimization", "Build a full pipeline"]
+            ]],
+            ["Cloud Computing", "#3b82f6", "Run software on rented infrastructure from AWS, Azure or Google Cloud.", [
+                ["Networking & Linux basics", "Virtualization concepts", "IaaS / PaaS / SaaS", "Create a free cloud account"],
+                ["Compute, storage & databases", "IAM & security", "VPC networking", "Cloud foundations cert"],
+                ["Serverless", "Terraform (Infrastructure as Code)", "Load balancing & autoscaling", "Monitoring & cost control"],
+                ["Multi-region architecture", "Kubernetes on cloud", "Associate / Professional cert", "Design a resilient system"]
+            ]],
+            ["DevOps", "#10b981", "Automate how software is built, tested, shipped and kept running.", [
+                ["Linux & Bash", "Git workflows", "Networking basics", "Scripting in Python or Go"],
+                ["CI/CD (GitHub Actions)", "Docker", "Ansible", "Nginx web server"],
+                ["Kubernetes", "Terraform", "Prometheus & Grafana", "Centralized logging"],
+                ["GitOps", "SRE & SLOs", "DevSecOps", "Run a full delivery pipeline"]
+            ]],
+            ["Frontend Development", "#6d5efc", "Build what users see and touch in the browser: pages, layouts and interactive apps.", [
+                ["How the web works", "HTML basics", "CSS basics", "Git & GitHub"],
+                ["Flexbox & Grid", "Responsive design", "JavaScript fundamentals", "DOM & events"],
+                ["ES6+, async & fetch", "React (or Vue)", "TypeScript", "Tailwind / CSS tooling"],
+                ["Performance & Core Web Vitals", "Accessibility (a11y)", "Testing (Vitest, Playwright)", "Next.js + deploy 3 portfolio projects"]
+            ]],
+            ["Backend Development", "#19c3b1", "Create the servers, APIs and databases that power every app behind the scenes.", [
+                ["Pick a language (Python, JS, Java, C#)", "Programming basics", "Command line & Git", "How HTTP & REST work"],
+                ["Build a REST API", "SQL & relational databases", "Authentication (JWT, sessions)", "Validation & environment config"],
+                ["ORMs & migrations", "Caching with Redis", "Automated testing", "Docker"],
+                ["System design & scalability", "Queues & background jobs", "Security & rate limiting", "Deploy a production API with CI/CD"]
+            ]],
+            ["Mobile Development", "#ff6fa5", "Make apps for phones and tablets on Android, iOS, or both at once.", [
+                ["Choose Android, iOS or cross-platform", "Programming basics (Kotlin, Swift, Dart)", "UI layout basics", "Run an app on an emulator"],
+                ["Navigation & state", "Lists & forms", "Call REST APIs", "Local storage"],
+                ["App architecture (MVVM)", "Auth & push notifications", "Camera, maps & sensors", "Testing"],
+                ["Performance & offline mode", "Publish to the stores", "Analytics & crash reports", "Ship 2 real apps"]
+            ]],
+            ["Data Analysis", "#f5a623", "Turn raw numbers into answers and dashboards that help people make decisions.", [
+                ["Excel / Google Sheets", "Basic statistics", "SQL SELECT queries", "Clean a messy spreadsheet"],
+                ["Joins & aggregation", "Python + pandas", "Data cleaning", "Charts with Matplotlib"],
+                ["Power BI or Tableau", "A/B testing", "Storytelling with data", "Window functions"],
+                ["Automated reports", "Full business case study", "Portfolio of 3 dashboards", "Specialize in a domain"]
+            ]],
+
+            ["Cybersecurity", "#ef4444", "Protect systems, networks and data by thinking like both attacker and defender.", [
+                ["Networking basics", "Linux command line", "How the web works", "CIA triad & common threats"],
+                ["Cryptography basics", "OWASP Top 10", "Wireshark & Nmap", "Security+ level knowledge"],
+                ["Pen testing (Kali, Burp Suite)", "SIEM & log analysis", "Incident response", "TryHackMe / Hack The Box labs"],
+                ["Choose red team or blue team", "Malware & reverse engineering", "Cloud security", "OSCP / CISSP level cert"]
+            ]],
+
+            ["Networking & Sysadmin", "#64748b", "Connect and maintain the computers, servers and networks organizations rely on.", [
+                ["OSI & TCP/IP", "IP addressing & subnets", "Cables, switches & routers", "Cisco Packet Tracer"],
+                ["VLANs & routing", "DNS, DHCP & NAT", "Windows / Linux server basics", "CCNA level knowledge"],
+                ["Firewalls & VPNs", "Active Directory", "Wireless networks", "Monitoring tools"],
+                ["Network automation", "Enterprise network design", "CCNP level cert", "Troubleshoot live incidents"]
+            ]],
+            ["UI/UX Design", "#d946ef", "Research users and design products that are clear, useful and pleasant.", [
+                ["Design principles", "Color & typography", "Figma basics", "Analyze apps you use daily"],
+                ["User research & personas", "Wireframes", "User flows", "Design system basics"],
+                ["Interactive prototyping", "Usability testing", "Accessibility", "Responsive design"],
+                ["Complete case studies", "Build a design system", "Work with developers", "Portfolio of 3 cases"]
+            ]],
+            ["Game Development", "#f97316", "Build interactive worlds with graphics, physics, sound and gameplay logic.", [
+                ["Programming basics (C# or C++)", "The game loop idea", "Install Unity or Godot", "Math: vectors"],
+                ["Movement & physics", "Collisions & input", "Import sprites / 3D models", "Build Pong or a platformer"],
+                ["Animation & audio", "UI & game state", "Enemy AI", "Save systems"],
+                ["Optimization", "Multiplayer", "Publish on itch.io or Steam", "Finish a full game"]
+            ]],
+            ["Software Testing (QA)", "#84cc16", "Find bugs early and prove that software works the way people expect.", [
+                ["Software development lifecycle", "Writing test cases", "Bug reporting", "Basic SQL"],
+                ["Test types & techniques", "Jira", "API testing (Postman)", "Browser DevTools"],
+                ["Selenium / Playwright automation", "Programming (JS or Python)", "CI integration", "Performance testing"],
+                ["Test strategy", "BDD & test frameworks", "Security testing basics", "ISTQB cert"]
+            ]],
+            ["Embedded & IoT", "#14b8a6", "Program small devices and connect physical things like sensors and robots to the internet.", [
+                ["Electronics basics", "C programming", "Arduino setup", "Read datasheets"],
+                ["Sensors & actuators", "I2C, SPI & UART", "Interrupts & timers", "ESP32 / Raspberry Pi"],
+                ["RTOS", "Wi-Fi, Bluetooth & MQTT", "Low-power design", "PCB basics"],
+                ["Cloud-connected devices", "Firmware security", "OTA updates", "Build a complete product"]
+            ]]
+        ];
+        let P = {};
+        try {
+            P = JSON.parse(localStorage.getItem("it-roadmap-v1") || "{}")
+        } catch (e) {}
+        let ref = null,
+            timer = null;
+        const st = t => {
+            const e = document.getElementById("st");
+            if (e) e.textContent = t ? " · " + t : ""
+        };
+        const save = () => {
+            try {
+                localStorage.setItem("it-roadmap-v1", JSON.stringify(P))
+            } catch (e) {}
+            if (!ref) return;
+            clearTimeout(timer);
+            timer = setTimeout(async() => {
+                try {
+                    await ref.set({
+                        ids: Object.keys(P)
+                    });
+                    st("Saved automatically")
+                } catch (e) {
+                    st("Saved on this device only")
+                }
+            }, 400);
+        };
+        const list = document.getElementById("list");
+        T.forEach(([name, c, intro, st], i) => {
+            const n = st.flat().length,
+                d = document.createElement("details");
+            d.className = "t glass";
+            d.style.setProperty("--c", c);
+            let h = `<summary><span class="dot"></span><div class="hd"><h2>${name}</h2><p>${intro}</p><div class="bar"><b></b></div></div><span class="cnt"></span></summary><div class="body">`;
+            st.forEach((tasks, s) => {
+                h += `<h3>${S[s]}</h3>`;
+                tasks.forEach((t, k) => {
+                    const id = `${i}-${s}-${k}`;
+                    h += `<label class="${P[id] ? "done" : ""}"><input type="checkbox" data-id="${id}" ${P[id] ? "checked" : ""}><span>${t}</span></label>`
+                })
+            });
+            d.innerHTML = h + "</div>";
+            list.appendChild(d);
+            d._n = n;
+        });
+
+        function update() {
+            let all = 0,
+                done = 0;
+            [...list.children].forEach((d, i) => {
+                const c = d.querySelectorAll("input:checked").length;
+                all += d._n;
+                done += c;
+                d.querySelector(".cnt").textContent = c + " / " + d._n;
+                d.querySelector(".bar b").style.width = (c / d._n * 100) + "%";
+            });
+            document.getElementById("total").textContent = done + " of " + all + " tasks finished";
+        }
+        list.addEventListener("change", e => {
+            const i = e.target;
+            if (!i.dataset.id) return;
+            i.checked ? P[i.dataset.id] = 1 : delete P[i.dataset.id];
+            i.parentElement.classList.toggle("done", i.checked);
+            save();
+            update();
+        });
+        update();
+
+        function apply() {
+            list.querySelectorAll("input").forEach(i => {
+                i.checked = !!P[i.dataset.id];
+                i.parentElement.classList.toggle("done", i.checked)
+            });
+            update();
+        }
+        (async() => {
+            try {
+                const [db, user] = await Promise.all([claude.use("db"), claude.use("user")]);
+                if (!db || !user) return;
+                ref = db.collection("data/users/" + await user.id()).doc("progress");
+                const s = await ref.get();
+                if (s.exists) {
+                    P = {};
+                    ((s.data() || {}).ids || []).forEach(k => P[k] = 1);
+                    apply();
+                    try {
+                        localStorage.setItem("it-roadmap-v1", JSON.stringify(P))
+                    } catch (e) {}
+                } else if (Object.keys(P).length) save();
+                st("Saved automatically");
+            } catch (e) {}
+        })();
+    </script>
+</body>
+
+</html>
